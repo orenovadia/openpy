@@ -28,3 +28,15 @@ class LocalFileSystem(FileSystem):
 
     def open(self, filename) -> typing.BinaryIO:
         return open(filename, 'rb')
+
+class S3FileSystem(FileSystem):
+    @classmethod
+    def services(cls, schema: str) -> bool:
+        return schema == 's3'
+
+    def open(self, filename) -> typing.BinaryIO:
+        try:
+            import s3fs
+        except ImportError:
+            raise ImportError("s3fs required for s3 files")
+        return s3fs.S3FileSystem().open(filename, mode='rb')
