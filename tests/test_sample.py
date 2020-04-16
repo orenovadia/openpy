@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, skip
 
 import openpy
 
@@ -16,6 +16,11 @@ class OpenTests(TestCase):
         contents = self._read('gzipped.gz')
         self.assertTrue('this string' in contents)
 
+    def test_local_gzipped_file_without_extension(self):
+        contents = self._read('gzipped_file_without_extention')
+        self.assertTrue('this string' in contents)
+
+    @skip('slow')
     def test_s3_plain(self):
         path_to_public_data_in_s3 = 's3://gdc-target-phs000218-2-open/2134dc56-81e2' \
                                     '-4a77-bfa6-24d6fb764599/5e5edf30-89da-457a-b227-87052b1c8a5d_analysis.xml'
