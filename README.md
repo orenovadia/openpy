@@ -30,6 +30,10 @@ with read('data.gz') as f:
 with read('s3://bucket/path/to/file.gz') as f:
     print(f.read())
  
+# http[s]:
+with read('http://online.resource.com') as f:
+    print(f.read())
+ 
 ```
 
 ## Upload to pypi:
