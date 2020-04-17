@@ -9,13 +9,13 @@ class FileSystem(ABC):
     @classmethod
     def get_filesystem(cls, schema: str) -> 'FileSystem':
         for sub in FileSystem.__subclasses__():  # type: Type[FileSystem]
-            if sub.services(schema):
+            if sub._serves(schema):
                 return sub()
         raise ValueError(f'No filesystem registered for "{schema}"')
 
     @classmethod
     @abstractmethod
-    def services(cls, schema: str) -> bool:
+    def _serves(cls, schema: str) -> bool:
         pass
 
     @abstractmethod
@@ -25,7 +25,7 @@ class FileSystem(ABC):
 
 class LocalFileSystem(FileSystem):
     @classmethod
-    def services(cls, schema: str) -> bool:
+    def _serves(cls, schema: str) -> bool:
         return not schema
 
     def open(self, filename) -> typing.BinaryIO:
@@ -35,7 +35,7 @@ class LocalFileSystem(FileSystem):
 
 class S3FileSystem(FileSystem):
     @classmethod
-    def services(cls, schema: str) -> bool:
+    def _serves(cls, schema: str) -> bool:
         return schema == 's3'
 
     def open(self, filename) -> typing.BinaryIO:
@@ -48,7 +48,7 @@ class S3FileSystem(FileSystem):
 
 class HTTPFileSystem(FileSystem):
     @classmethod
-    def services(cls, schema: str) -> bool:
+    def _serves(cls, schema: str) -> bool:
         return schema in ('http', 'https')
 
     def open(self, filename) -> typing.BinaryIO:
