@@ -29,8 +29,7 @@ class LocalFileSystem(FileSystem):
         return not schema
 
     def open(self, filename) -> typing.BinaryIO:
-        path = str(Path(filename).expanduser())
-        return open(path, 'rb')
+        return Path(filename).expanduser().open('rb')
 
 
 class S3FileSystem(FileSystem):
