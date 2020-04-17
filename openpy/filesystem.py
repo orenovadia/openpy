@@ -1,3 +1,4 @@
+import io
 import typing
 from abc import ABC, abstractmethod
 from typing import Type
@@ -29,6 +30,7 @@ class LocalFileSystem(FileSystem):
     def open(self, filename) -> typing.BinaryIO:
         return open(filename, 'rb')
 
+
 class S3FileSystem(FileSystem):
     @classmethod
     def services(cls, schema: str) -> bool:
@@ -40,3 +42,19 @@ class S3FileSystem(FileSystem):
         except ImportError:
             raise ImportError("s3fs required for s3 files")
         return s3fs.S3FileSystem().open(filename, mode='rb')
+
+
+class HTTPFileSystem(FileSystem):
+    @classmethod
+    def services(cls, schema: str) -> bool:
+        return schema in ('http', 'https')
+
+    def open(self, filename) -> typing.BinaryIO:
+        try:
+            import requests
+        except ImportError:
+            raise ImportError("requests required for s3 files")
+        # TODO: stream contents from the response obj with stream=True
+        response = requests.get(filename)
+        response.raise_for_status()
+        return io.BytesIO(response.content)

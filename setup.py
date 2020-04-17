@@ -34,7 +34,7 @@ setup(
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     author='Oren Ovadia',
-    install_requires=['s3fs'],
+    install_requires=['s3fs','requests'],
     dependency_links=dependency_links,
     author_email='orenovad@gmail.com'
 )

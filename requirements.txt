@@ -3,3 +3,4 @@ nose
 coverage
 pypi-publisher
 s3fs
+requests
