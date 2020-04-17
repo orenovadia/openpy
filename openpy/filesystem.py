@@ -1,6 +1,7 @@
 import io
 import typing
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Type
 
 
@@ -28,7 +29,8 @@ class LocalFileSystem(FileSystem):
         return not schema
 
     def open(self, filename) -> typing.BinaryIO:
-        return open(filename, 'rb')
+        path = str(Path(filename).expanduser())
+        return open(path, 'rb')
 
 
 class S3FileSystem(FileSystem):
