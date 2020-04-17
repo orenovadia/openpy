@@ -40,7 +40,7 @@ class OpenTests(TestCase):
             self.assertTrue('analysis_xml' in next(f))
 
     def _read_local(self, path):
-        full_path = Path(__file__).cwd() / path
+        full_path = Path(__file__).parent / path
         return self._read(str(full_path))
 
     def _read(self, path):
