@@ -27,6 +27,10 @@ class OpenTests(TestCase):
         contents = self._read('https://raw.githubusercontent.com/orenovadia/openpy/master/README.md')
         self.assertTrue('openpy' in contents)
 
+    def test_http_zipped(self):
+        contents = self._read('https://github.com/orenovadia/openpy/raw/master/tests/gzipped.gz')
+        self.assertTrue('this string' in contents)
+
     @skip('slow')
     def test_s3_plain(self):
         path_to_public_data_in_s3 = 's3://gdc-target-phs000218-2-open/2134dc56-81e2' \
