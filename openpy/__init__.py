@@ -2,23 +2,26 @@ import binascii
 import io
 from contextlib import contextmanager
 from gzip import GzipFile
-from typing import BinaryIO
+from typing import BinaryIO, TextIO
 from urllib.parse import urlparse
 
 from openpy.filesystem import FileSystem
 
 
 @contextmanager
-def _open_file(file_name):
+def read(file_name: str) -> TextIO:
     """
-    open a local/s3 file whether uncompress if it is gzipped
+    just open a file for reading (as text)
+    Example:
+    >>> with read('README.md') as f:
+    >>>     contents = f.read()
     """
     parsed = urlparse(file_name)
 
     fs = FileSystem.get_filesystem(parsed.scheme)
 
-    with fs.open(file_name) as binary_io:
-        with _compression_wrapper(file_name, binary_io) as uncompressed:
+    with fs.open(file_name) as source:
+        with _compression_wrapper(file_name, source) as uncompressed:
             text = io.TextIOWrapper(uncompressed, encoding='utf-8')
             try:
                 yield text
@@ -35,6 +38,3 @@ def _compression_wrapper(file_name: str, f: BinaryIO):
     if has_header:
         return GzipFile(fileobj=f)
     return f
-
-
-open = _open_file

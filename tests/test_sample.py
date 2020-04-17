@@ -35,9 +35,9 @@ class OpenTests(TestCase):
     def test_s3_plain(self):
         path_to_public_data_in_s3 = 's3://gdc-target-phs000218-2-open/2134dc56-81e2' \
                                     '-4a77-bfa6-24d6fb764599/5e5edf30-89da-457a-b227-87052b1c8a5d_analysis.xml'
-        with openpy.open(path_to_public_data_in_s3) as f:
+        with openpy.read(path_to_public_data_in_s3) as f:
             self.assertTrue('analysis_xml' in next(f))
 
     def _read(self, path):
-        with openpy.open(path) as f:
+        with openpy.read(path) as f:
             return f.read()
